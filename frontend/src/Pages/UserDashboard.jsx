@@ -57,7 +57,7 @@ const UserDashboard = () => {
   const [loadingAppt, setLoadingAppt] = useState(true);
   const [loadingBill, setLoadingBill] = useState(true);
   const [selectedBill, setSelectedBill] = useState(null);
-  const [payingBillId, setPayingBillId] = useState(null);
+  const [payingBillId] = useState(null);
   const [profileForm, setProfileForm] = useState({
     firstName: "",
     lastName: "",

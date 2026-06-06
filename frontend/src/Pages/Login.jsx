@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   FaHospital, FaEnvelope, FaLock, FaEye, FaEyeSlash,
-  FaSignInAlt, FaUserShield,
+  FaSignInAlt,
 } from "react-icons/fa";
 import { authAPI } from "../services/api";
 import "../Assets/css/auth.css";
