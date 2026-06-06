@@ -1,12 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import Header from "../Components/Header";
 import {
-  FaCalendarCheck, FaFileInvoiceDollar, FaUserEdit,
-  FaLock, FaSignOutAlt, FaUserMd, FaClock, FaMapMarkerAlt,
-  FaCalendarAlt, FaCheckCircle,
-  FaTimesCircle, FaHourglassHalf, FaTimes, FaPrint,
-  FaCreditCard, FaExclamationCircle, FaTachometerAlt, FaSave,
+  FaCalendarCheck,
+  FaFileInvoiceDollar,
+  FaUserEdit,
+  FaLock,
+  FaSignOutAlt,
+  FaUserMd,
+  FaClock,
+  FaMapMarkerAlt,
+  FaCalendarAlt,
+  FaCheckCircle,
+  FaTimesCircle,
+  FaHourglassHalf,
+  FaTimes,
+  FaPrint,
+  FaCreditCard,
+  FaExclamationCircle,
+  FaTachometerAlt,
+  FaSave,
 } from "react-icons/fa";
 import { getCurrentUser, logout } from "../Components/ProtectedRoute";
 import { appointmentAPI, billAPI, patientAPI, authAPI } from "../services/api";
@@ -46,8 +58,16 @@ const UserDashboard = () => {
   const [loadingBill, setLoadingBill] = useState(true);
   const [selectedBill, setSelectedBill] = useState(null);
   const [payingBillId, setPayingBillId] = useState(null);
-  const [profileForm, setProfileForm] = useState({ firstName: "", lastName: "", phone: "" });
-  const [pwForm, setPwForm] = useState({ currentPassword: "", newPassword: "", confirmPassword: "" });
+  const [profileForm, setProfileForm] = useState({
+    firstName: "",
+    lastName: "",
+    phone: "",
+  });
+  const [pwForm, setPwForm] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
   const [profileMsg, setProfileMsg] = useState({ type: "", text: "" });
   const [pwMsg, setPwMsg] = useState({ type: "", text: "" });
   const [saving, setSaving] = useState(false);
@@ -136,7 +156,10 @@ const UserDashboard = () => {
       return;
     }
     if (pwForm.newPassword.length < 6) {
-      setPwMsg({ type: "error", text: "Password must be at least 6 characters" });
+      setPwMsg({
+        type: "error",
+        text: "Password must be at least 6 characters",
+      });
       return;
     }
 
@@ -149,17 +172,26 @@ const UserDashboard = () => {
       setPwMsg({ type: "success", text: "Password changed successfully!" });
       setPwForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
     } catch (err) {
-      setPwMsg({ type: "error", text: err.message || "Password change failed" });
+      setPwMsg({
+        type: "error",
+        text: err.message || "Password change failed",
+      });
     } finally {
       setSaving(false);
     }
   };
 
   const totalAppts = appointments.length;
-  const pendingAppts = appointments.filter(a => a.status === "Pending").length;
-  const completedAppts = appointments.filter(a => ["Completed", "Confirmed"].includes(a.status)).length;
-  const unpaidBills = bills.filter(b => b.paymentStatus === "Unpaid").length;
-  const totalDue = bills.filter(b => b.paymentStatus === "Unpaid").reduce((s, b) => s + (b.totalAmount || 0), 0);
+  const pendingAppts = appointments.filter(
+    (a) => a.status === "Pending",
+  ).length;
+  const completedAppts = appointments.filter((a) =>
+    ["Completed", "Confirmed"].includes(a.status),
+  ).length;
+  const unpaidBills = bills.filter((b) => b.paymentStatus === "Unpaid").length;
+  const totalDue = bills
+    .filter((b) => b.paymentStatus === "Unpaid")
+    .reduce((s, b) => s + (b.totalAmount || 0), 0);
 
   const initials = currentUser
     ? (currentUser.name || currentUser.email).slice(0, 2).toUpperCase()
@@ -167,7 +199,6 @@ const UserDashboard = () => {
 
   return (
     <div className="dashboard-layout">
-      <Header />
       <div className="dashboard-body">
         <aside className="dash-sidebar">
           <div className="dash-sidebar-user">
@@ -179,7 +210,7 @@ const UserDashboard = () => {
           </div>
 
           <nav className="dash-nav">
-            {TABS.map(tab => (
+            {TABS.map((tab) => (
               <button
                 key={tab.key}
                 className={`dash-nav-item ${activeTab === tab.key ? "active" : ""}`}
@@ -197,7 +228,9 @@ const UserDashboard = () => {
 
           <div className="dash-sidebar-footer">
             <button onClick={handleLogout}>
-              <span className="dash-nav-icon"><FaSignOutAlt /></span>
+              <span className="dash-nav-icon">
+                <FaSignOutAlt />
+              </span>
               Logout
             </button>
           </div>
@@ -206,10 +239,16 @@ const UserDashboard = () => {
         <main className="dash-main">
           <div className="dash-topbar">
             <div>
-              <h2>{TABS.find(t => t.key === activeTab)?.label}</h2>
-              <p>Welcome back, {currentUser?.name?.split(" ")[0] || "Patient"}</p>
+              <h2>{TABS.find((t) => t.key === activeTab)?.label}</h2>
+              <p>
+                Welcome back, {currentUser?.name?.split(" ")[0] || "Patient"}
+              </p>
             </div>
-            <Link to="/appointment" className="btn-primary" style={{ fontSize: "0.85rem", padding: "0.55rem 1.1rem" }}>
+            <Link
+              to="/appointment"
+              className="btn-primary"
+              style={{ fontSize: "0.85rem", padding: "0.55rem 1.1rem" }}
+            >
               <FaCalendarCheck /> Book Appointment
             </Link>
           </div>
@@ -219,28 +258,36 @@ const UserDashboard = () => {
               <>
                 <div className="overview-cards">
                   <div className="ov-card">
-                    <div className="ov-card-icon blue"><FaCalendarCheck /></div>
+                    <div className="ov-card-icon blue">
+                      <FaCalendarCheck />
+                    </div>
                     <div className="ov-card-info">
                       <p>Total Appointments</p>
                       <h3>{totalAppts}</h3>
                     </div>
                   </div>
                   <div className="ov-card">
-                    <div className="ov-card-icon orange"><FaHourglassHalf /></div>
+                    <div className="ov-card-icon orange">
+                      <FaHourglassHalf />
+                    </div>
                     <div className="ov-card-info">
                       <p>Pending</p>
                       <h3>{pendingAppts}</h3>
                     </div>
                   </div>
                   <div className="ov-card">
-                    <div className="ov-card-icon green"><FaCheckCircle /></div>
+                    <div className="ov-card-icon green">
+                      <FaCheckCircle />
+                    </div>
                     <div className="ov-card-info">
                       <p>Completed</p>
                       <h3>{completedAppts}</h3>
                     </div>
                   </div>
                   <div className="ov-card">
-                    <div className="ov-card-icon red"><FaExclamationCircle /></div>
+                    <div className="ov-card-icon red">
+                      <FaExclamationCircle />
+                    </div>
                     <div className="ov-card-info">
                       <p>Unpaid Bills</p>
                       <h3>{unpaidBills}</h3>
@@ -254,24 +301,33 @@ const UserDashboard = () => {
                       <h3>Recent Appointments</h3>
                       <p>Your latest bookings</p>
                     </div>
-                    <button className="btn-view-invoice" onClick={() => setActiveTab("appointments")}>
+                    <button
+                      className="btn-view-invoice"
+                      onClick={() => setActiveTab("appointments")}
+                    >
                       View All
                     </button>
                   </div>
                   <div className="dash-section-body">
                     {loadingAppt ? (
-                      <p style={{ color: "#5f7285", fontSize: "0.9rem" }}>Loading...</p>
+                      <p style={{ color: "#5f7285", fontSize: "0.9rem" }}>
+                        Loading...
+                      </p>
                     ) : appointments.length === 0 ? (
                       <div className="empty-state">
                         <FaCalendarCheck />
                         <p>No appointments yet.</p>
-                        <Link to="/appointment" className="btn-primary" style={{ fontSize: "0.85rem" }}>
+                        <Link
+                          to="/appointment"
+                          className="btn-primary"
+                          style={{ fontSize: "0.85rem" }}
+                        >
                           Book Your First Appointment
                         </Link>
                       </div>
                     ) : (
                       <div className="appt-list">
-                        {appointments.slice(0, 3).map(appt => (
+                        {appointments.slice(0, 3).map((appt) => (
                           <AppointmentCard key={appt._id} appt={appt} />
                         ))}
                       </div>
@@ -284,23 +340,34 @@ const UserDashboard = () => {
                     <div className="dash-section-header">
                       <div>
                         <h3>Outstanding Bills</h3>
-                        <p>Total due: <strong style={{ color: "#ef4444" }}>₹{totalDue.toLocaleString()}</strong></p>
+                        <p>
+                          Total due:{" "}
+                          <strong style={{ color: "#ef4444" }}>
+                            ₹{totalDue.toLocaleString()}
+                          </strong>
+                        </p>
                       </div>
-                      <button className="btn-view-invoice" onClick={() => setActiveTab("bills")}>
+                      <button
+                        className="btn-view-invoice"
+                        onClick={() => setActiveTab("bills")}
+                      >
                         View All Bills
                       </button>
                     </div>
                     <div className="dash-section-body">
                       <div className="bill-list">
-                        {bills.filter(b => b.paymentStatus === "Unpaid").slice(0, 3).map(bill => (
-                          <BillCard
-                            key={bill._id}
-                            bill={bill}
-                            onView={() => setSelectedBill(bill)}
-                            onPay={handlePayBill}
-                            payingId={payingBillId}
-                          />
-                        ))}
+                        {bills
+                          .filter((b) => b.paymentStatus === "Unpaid")
+                          .slice(0, 3)
+                          .map((bill) => (
+                            <BillCard
+                              key={bill._id}
+                              bill={bill}
+                              onView={() => setSelectedBill(bill)}
+                              onPay={handlePayBill}
+                              payingId={payingBillId}
+                            />
+                          ))}
                       </div>
                     </div>
                   </div>
@@ -315,24 +382,34 @@ const UserDashboard = () => {
                     <h3>All Appointments</h3>
                     <p>{appointments.length} total records</p>
                   </div>
-                  <Link to="/appointment" className="btn-primary" style={{ fontSize: "0.83rem", padding: "0.5rem 1rem" }}>
+                  <Link
+                    to="/appointment"
+                    className="btn-primary"
+                    style={{ fontSize: "0.83rem", padding: "0.5rem 1rem" }}
+                  >
                     <FaCalendarCheck /> Book New
                   </Link>
                 </div>
                 <div className="dash-section-body">
                   {loadingAppt ? (
-                    <p style={{ color: "#5f7285", fontSize: "0.9rem" }}>Loading...</p>
+                    <p style={{ color: "#5f7285", fontSize: "0.9rem" }}>
+                      Loading...
+                    </p>
                   ) : appointments.length === 0 ? (
                     <div className="empty-state">
                       <FaCalendarCheck />
                       <p>You have no appointments yet.</p>
-                      <Link to="/appointment" className="btn-primary" style={{ fontSize: "0.85rem" }}>
+                      <Link
+                        to="/appointment"
+                        className="btn-primary"
+                        style={{ fontSize: "0.85rem" }}
+                      >
                         Book an Appointment
                       </Link>
                     </div>
                   ) : (
                     <div className="appt-list">
-                      {appointments.map(appt => (
+                      {appointments.map((appt) => (
                         <AppointmentCard key={appt._id} appt={appt} detailed />
                       ))}
                     </div>
@@ -349,22 +426,36 @@ const UserDashboard = () => {
                     <p>{bills.length} total bills</p>
                   </div>
                   {unpaidBills > 0 && (
-                    <span style={{ fontSize: "0.82rem", background: "#fef3c7", color: "#92400e", padding: "0.3rem 0.75rem", borderRadius: "20px", fontWeight: 700 }}>
+                    <span
+                      style={{
+                        fontSize: "0.82rem",
+                        background: "#fef3c7",
+                        color: "#92400e",
+                        padding: "0.3rem 0.75rem",
+                        borderRadius: "20px",
+                        fontWeight: 700,
+                      }}
+                    >
                       {unpaidBills} Unpaid
                     </span>
                   )}
                 </div>
                 <div className="dash-section-body">
                   {loadingBill ? (
-                    <p style={{ color: "#5f7285", fontSize: "0.9rem" }}>Loading...</p>
+                    <p style={{ color: "#5f7285", fontSize: "0.9rem" }}>
+                      Loading...
+                    </p>
                   ) : bills.length === 0 ? (
                     <div className="empty-state">
                       <FaFileInvoiceDollar />
-                      <p>No bills generated yet. Bills appear after booking appointments.</p>
+                      <p>
+                        No bills generated yet. Bills appear after booking
+                        appointments.
+                      </p>
                     </div>
                   ) : (
                     <div className="bill-list">
-                      {bills.map(bill => (
+                      {bills.map((bill) => (
                         <BillCard
                           key={bill._id}
                           bill={bill}
@@ -382,17 +473,27 @@ const UserDashboard = () => {
             {activeTab === "profile" && (
               <div className="dash-section-card">
                 <div className="dash-section-header">
-                  <div><h3>My Profile</h3><p>Manage your personal information</p></div>
+                  <div>
+                    <h3>My Profile</h3>
+                    <p>Manage your personal information</p>
+                  </div>
                 </div>
                 <div className="dash-section-body">
                   <div style={{ textAlign: "center", marginBottom: "1.75rem" }}>
                     <div className="profile-avatar-large">{initials}</div>
-                    <h3 style={{ fontWeight: 700, color: "#17324d" }}>{currentUser?.name}</h3>
-                    <p style={{ color: "#5f7285", fontSize: "0.88rem" }}>{currentUser?.email}</p>
+                    <h3 style={{ fontWeight: 700, color: "#17324d" }}>
+                      {currentUser?.name}
+                    </h3>
+                    <p style={{ color: "#5f7285", fontSize: "0.88rem" }}>
+                      {currentUser?.email}
+                    </p>
                   </div>
 
                   {profileMsg.text && (
-                    <div className={`alert alert-${profileMsg.type === "success" ? "success" : "error"}`} style={{ marginBottom: "1.25rem" }}>
+                    <div
+                      className={`alert alert-${profileMsg.type === "success" ? "success" : "error"}`}
+                      style={{ marginBottom: "1.25rem" }}
+                    >
                       {profileMsg.text}
                     </div>
                   )}
@@ -404,7 +505,12 @@ const UserDashboard = () => {
                         <input
                           type="text"
                           value={profileForm.firstName}
-                          onChange={e => setProfileForm(prev => ({ ...prev, firstName: e.target.value }))}
+                          onChange={(e) =>
+                            setProfileForm((prev) => ({
+                              ...prev,
+                              firstName: e.target.value,
+                            }))
+                          }
                           required
                         />
                       </div>
@@ -413,33 +519,66 @@ const UserDashboard = () => {
                         <input
                           type="text"
                           value={profileForm.lastName}
-                          onChange={e => setProfileForm(prev => ({ ...prev, lastName: e.target.value }))}
+                          onChange={(e) =>
+                            setProfileForm((prev) => ({
+                              ...prev,
+                              lastName: e.target.value,
+                            }))
+                          }
                           required
                         />
                       </div>
                       <div className="form-group">
                         <label>Email Address</label>
-                        <input type="email" value={profile?.email || currentUser?.email} disabled style={{ opacity: 0.6 }} />
+                        <input
+                          type="email"
+                          value={profile?.email || currentUser?.email}
+                          disabled
+                          style={{ opacity: 0.6 }}
+                        />
                       </div>
                       <div className="form-group">
                         <label>Phone Number</label>
                         <input
                           type="tel"
                           value={profileForm.phone}
-                          onChange={e => setProfileForm(prev => ({ ...prev, phone: e.target.value }))}
+                          onChange={(e) =>
+                            setProfileForm((prev) => ({
+                              ...prev,
+                              phone: e.target.value,
+                            }))
+                          }
                         />
                       </div>
                     </div>
-                    <div className="form-group" style={{ marginTop: "0.25rem" }}>
+                    <div
+                      className="form-group"
+                      style={{ marginTop: "0.25rem" }}
+                    >
                       <label>Member Since</label>
                       <input
                         type="text"
-                        value={profile?.createdAt ? new Date(profile.createdAt).toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric" }) : "—"}
+                        value={
+                          profile?.createdAt
+                            ? new Date(profile.createdAt).toLocaleDateString(
+                                "en-US",
+                                {
+                                  day: "numeric",
+                                  month: "long",
+                                  year: "numeric",
+                                },
+                              )
+                            : "—"
+                        }
                         disabled
                         style={{ opacity: 0.6 }}
                       />
                     </div>
-                    <button type="submit" className="btn-primary" disabled={saving}>
+                    <button
+                      type="submit"
+                      className="btn-primary"
+                      disabled={saving}
+                    >
                       <FaSave /> {saving ? "Saving..." : "Save Changes"}
                     </button>
                   </form>
@@ -450,11 +589,17 @@ const UserDashboard = () => {
             {activeTab === "password" && (
               <div className="dash-section-card" style={{ maxWidth: 520 }}>
                 <div className="dash-section-header">
-                  <div><h3>Change Password</h3><p>Keep your account secure</p></div>
+                  <div>
+                    <h3>Change Password</h3>
+                    <p>Keep your account secure</p>
+                  </div>
                 </div>
                 <div className="dash-section-body">
                   {pwMsg.text && (
-                    <div className={`alert alert-${pwMsg.type === "success" ? "success" : "error"}`} style={{ marginBottom: "1.25rem" }}>
+                    <div
+                      className={`alert alert-${pwMsg.type === "success" ? "success" : "error"}`}
+                      style={{ marginBottom: "1.25rem" }}
+                    >
                       {pwMsg.text}
                     </div>
                   )}
@@ -465,7 +610,12 @@ const UserDashboard = () => {
                         type="password"
                         placeholder="Enter current password"
                         value={pwForm.currentPassword}
-                        onChange={e => setPwForm(prev => ({ ...prev, currentPassword: e.target.value }))}
+                        onChange={(e) =>
+                          setPwForm((prev) => ({
+                            ...prev,
+                            currentPassword: e.target.value,
+                          }))
+                        }
                         required
                       />
                     </div>
@@ -475,7 +625,12 @@ const UserDashboard = () => {
                         type="password"
                         placeholder="Min. 6 characters"
                         value={pwForm.newPassword}
-                        onChange={e => setPwForm(prev => ({ ...prev, newPassword: e.target.value }))}
+                        onChange={(e) =>
+                          setPwForm((prev) => ({
+                            ...prev,
+                            newPassword: e.target.value,
+                          }))
+                        }
                         required
                       />
                     </div>
@@ -485,11 +640,20 @@ const UserDashboard = () => {
                         type="password"
                         placeholder="Repeat new password"
                         value={pwForm.confirmPassword}
-                        onChange={e => setPwForm(prev => ({ ...prev, confirmPassword: e.target.value }))}
+                        onChange={(e) =>
+                          setPwForm((prev) => ({
+                            ...prev,
+                            confirmPassword: e.target.value,
+                          }))
+                        }
                         required
                       />
                     </div>
-                    <button type="submit" className="btn-primary" disabled={saving}>
+                    <button
+                      type="submit"
+                      className="btn-primary"
+                      disabled={saving}
+                    >
                       <FaLock /> {saving ? "Updating..." : "Update Password"}
                     </button>
                   </form>
@@ -519,15 +683,39 @@ const AppointmentCard = ({ appt, detailed = false }) => (
     </div>
     <div className="appt-card-info">
       <h4>{appt.doctor}</h4>
-      <div style={{ fontSize: "0.8rem", color: "#5f7285", marginBottom: "0.35rem" }}>{appt.department}</div>
+      <div
+        style={{
+          fontSize: "0.8rem",
+          color: "#5f7285",
+          marginBottom: "0.35rem",
+        }}
+      >
+        {appt.department}
+      </div>
       <div className="appt-meta">
-        <span><FaCalendarAlt /> {appt.date}</span>
-        <span><FaClock /> {appt.time}</span>
-        {detailed && appt.reason && <span><FaMapMarkerAlt /> {appt.reason}</span>}
+        <span>
+          <FaCalendarAlt /> {appt.date}
+        </span>
+        <span>
+          <FaClock /> {appt.time}
+        </span>
+        {detailed && appt.reason && (
+          <span>
+            <FaMapMarkerAlt /> {appt.reason}
+          </span>
+        )}
       </div>
     </div>
     <div className="appt-card-actions">
-      <div style={{ display: "flex", alignItems: "center", gap: "0.35rem", fontSize: "0.8rem", fontWeight: 600 }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "0.35rem",
+          fontSize: "0.8rem",
+          fontWeight: 600,
+        }}
+      >
         {STATUS_ICON[appt.status]}
         {appt.status}
       </div>
@@ -542,9 +730,19 @@ const BillCard = ({ bill, onView, onPay, payingId }) => (
     </div>
     <div className="bill-card-info">
       <h4>{bill.doctor}</h4>
-      <p>{bill.department} &nbsp;|&nbsp; {bill.date} &nbsp;|&nbsp; Invoice: {bill.invoiceNumber}</p>
+      <p>
+        {bill.department} &nbsp;|&nbsp; {bill.date} &nbsp;|&nbsp; Invoice:{" "}
+        {bill.invoiceNumber}
+      </p>
     </div>
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "0.5rem" }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-end",
+        gap: "0.5rem",
+      }}
+    >
       <div className="bill-amount">
         ₹{bill.totalAmount?.toLocaleString()}
         <small style={PAYMENT_STATUS_STYLE[bill.paymentStatus] || {}}>
@@ -556,8 +754,13 @@ const BillCard = ({ bill, onView, onPay, payingId }) => (
           View Invoice
         </button>
         {bill.paymentStatus === "Unpaid" && (
-          <button className="btn-pay" onClick={() => onPay(bill._id)} disabled={payingId === bill._id}>
-            <FaCreditCard /> {payingId === bill._id ? "Processing..." : "Pay Now"}
+          <button
+            className="btn-pay"
+            onClick={() => onPay(bill._id)}
+            disabled={payingId === bill._id}
+          >
+            <FaCreditCard />{" "}
+            {payingId === bill._id ? "Processing..." : "Pay Now"}
           </button>
         )}
       </div>
@@ -569,7 +772,10 @@ const InvoiceModal = ({ bill, onClose, onPay, payingId }) => {
   const handlePrint = () => window.print();
 
   return (
-    <div className="invoice-overlay" onClick={e => e.target === e.currentTarget && onClose()}>
+    <div
+      className="invoice-overlay"
+      onClick={(e) => e.target === e.currentTarget && onClose()}
+    >
       <div className="invoice-modal">
         <div className="invoice-header">
           <div className="invoice-header-top">
@@ -577,7 +783,9 @@ const InvoiceModal = ({ bill, onClose, onPay, payingId }) => {
               <h2>HealthNest</h2>
               <p>Medical Invoice</p>
             </div>
-            <button className="invoice-close-btn" onClick={onClose}><FaTimes /></button>
+            <button className="invoice-close-btn" onClick={onClose}>
+              <FaTimes />
+            </button>
           </div>
           <div className="invoice-number">Invoice # {bill.invoiceNumber}</div>
         </div>
@@ -611,7 +819,15 @@ const InvoiceModal = ({ bill, onClose, onPay, payingId }) => {
             <div className="invoice-info-item">
               <label>Payment Status</label>
               <p>
-                <span style={{ ...PAYMENT_STATUS_STYLE[bill.paymentStatus], padding: "0.2rem 0.6rem", borderRadius: "6px", fontSize: "0.82rem", fontWeight: 700 }}>
+                <span
+                  style={{
+                    ...PAYMENT_STATUS_STYLE[bill.paymentStatus],
+                    padding: "0.2rem 0.6rem",
+                    borderRadius: "6px",
+                    fontSize: "0.82rem",
+                    fontWeight: 700,
+                  }}
+                >
                   {bill.paymentStatus}
                 </span>
               </p>
@@ -635,7 +851,9 @@ const InvoiceModal = ({ bill, onClose, onPay, payingId }) => {
               {bill.items?.map((item, i) => (
                 <tr key={i}>
                   <td>{item.description}</td>
-                  <td style={{ textAlign: "right" }}>₹{item.amount?.toLocaleString()}</td>
+                  <td style={{ textAlign: "right" }}>
+                    ₹{item.amount?.toLocaleString()}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -655,7 +873,9 @@ const InvoiceModal = ({ bill, onClose, onPay, payingId }) => {
             {bill.discount > 0 && (
               <div className="invoice-total-row">
                 <span>Discount</span>
-                <span style={{ color: "#18a999" }}>- ₹{bill.discount?.toLocaleString()}</span>
+                <span style={{ color: "#18a999" }}>
+                  - ₹{bill.discount?.toLocaleString()}
+                </span>
               </div>
             )}
             <div className="invoice-total-row grand-total">
@@ -665,7 +885,16 @@ const InvoiceModal = ({ bill, onClose, onPay, payingId }) => {
           </div>
 
           {bill.notes && (
-            <div style={{ padding: "0.75rem 1rem", background: "#f7fafd", borderRadius: "8px", fontSize: "0.85rem", color: "#5f7285", marginBottom: "1rem" }}>
+            <div
+              style={{
+                padding: "0.75rem 1rem",
+                background: "#f7fafd",
+                borderRadius: "8px",
+                fontSize: "0.85rem",
+                color: "#5f7285",
+                marginBottom: "1rem",
+              }}
+            >
               <strong style={{ color: "#17324d" }}>Notes:</strong> {bill.notes}
             </div>
           )}
@@ -676,12 +905,25 @@ const InvoiceModal = ({ bill, onClose, onPay, payingId }) => {
             <FaPrint /> Print
           </button>
           {bill.paymentStatus === "Unpaid" && (
-            <button className="btn-pay" disabled style={{ opacity: 0.65, cursor: "not-allowed" }}>
+            <button
+              className="btn-pay"
+              disabled
+              style={{ opacity: 0.65, cursor: "not-allowed" }}
+            >
               <FaCreditCard /> Payment handled by Admin
             </button>
           )}
           {bill.paymentStatus === "Paid" && (
-            <span style={{ display: "flex", alignItems: "center", gap: "0.4rem", color: "#065f46", fontWeight: 700, fontSize: "0.88rem" }}>
+            <span
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.4rem",
+                color: "#065f46",
+                fontWeight: 700,
+                fontSize: "0.88rem",
+              }}
+            >
               <FaCheckCircle /> Paid Successfully
             </span>
           )}

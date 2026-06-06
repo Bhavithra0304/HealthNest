@@ -138,23 +138,6 @@ const Login = () => {
           Don't have an account? <Link to="/register">Register here</Link>
         </div>
 
-        <div
-          style={{
-            marginTop: "1.25rem", padding: "0.85rem",
-            background: "var(--surface-2)", borderRadius: "var(--radius-sm)",
-            border: "1px solid var(--border)", fontSize: "0.82rem", color: "var(--muted)",
-          }}
-        >
-          <strong
-            style={{
-              display: "flex", alignItems: "center", gap: "0.4rem",
-              color: "var(--primary)", marginBottom: "0.3rem",
-            }}
-          >
-            <FaUserShield /> Admin Login
-          </strong>
-          Email: admin@healthnest.com &nbsp;|&nbsp; Password: Admin@123
-        </div>
       </div>
     </div>
   );

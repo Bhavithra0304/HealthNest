@@ -8,57 +8,16 @@ import {
   FaArrowUp,
   FaCalendarDay,
   FaClipboardList,
-  FaUserPlus,
-  FaCheckCircle,
-  FaClock,
   FaBell,
 } from "react-icons/fa";
 import { dashboardAPI } from "../services/api";
 
-const depts = [
-  { name: "Cardiology", patients: 42, pct: 82 },
-  { name: "Neurology", patients: 35, pct: 68 },
-  { name: "Orthopedics", patients: 28, pct: 55 },
-  { name: "Pediatrics", patients: 51, pct: 100 },
-  { name: "Dermatology", patients: 19, pct: 37 },
-];
-
-const activityIcons = [
-  {
-    icon: <FaUserPlus />,
-    color: "blue",
-    title: "New patient registered",
-    time: "2 mins ago",
-  },
-  {
-    icon: <FaCalendarCheck />,
-    color: "green",
-    title: "Appointment confirmed",
-    time: "15 mins ago",
-  },
-  {
-    icon: <FaCheckCircle />,
-    color: "purple",
-    title: "Lab report uploaded",
-    time: "1 hr ago",
-  },
-  {
-    icon: <FaClock />,
-    color: "orange",
-    title: "Appointment pending",
-    time: "2 hrs ago",
-  },
-  {
-    icon: <FaUserMd />,
-    color: "green",
-    title: "Dr. Chen checked in",
-    time: "3 hrs ago",
-  },
-];
-
 const AdminDashboard = () => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const depts = stats?.departmentLoad || [];
+  const activities = stats?.recentActivities || [];
 
   useEffect(() => {
     const controller = new AbortController();
@@ -67,14 +26,16 @@ const AdminDashboard = () => {
     const loadStats = async () => {
       try {
         const res = await dashboardAPI.get({ signal: controller.signal });
-        if (mounted) setStats(res.data);
+        if (mounted) {
+          setStats(res.data);
+          console.log(res);
+        }
       } catch (err) {
         if (err.name !== "AbortError" && mounted) setStats(null);
       } finally {
         if (mounted) setLoading(false);
       }
     };
-
     loadStats();
 
     return () => {
@@ -82,6 +43,10 @@ const AdminDashboard = () => {
       controller.abort();
     };
   }, []);
+
+  useEffect(() => {
+    console.log("Stats:", stats);
+  }, [stats]);
 
   const totalPatients = stats?.totalPatients ?? 0;
   const totalDoctors = stats?.totalDoctors ?? 0;
@@ -114,7 +79,7 @@ const AdminDashboard = () => {
     {
       icon: <FaHospital />,
       label: "Departments",
-      value: 25,
+      value: depts.length,
       trend: "Active",
       color: "purple",
     },
@@ -296,20 +261,28 @@ const AdminDashboard = () => {
                       <p>Current patient distribution</p>
                     </div>
                     <div className="activity-list">
-                      {depts.map((d, i) => (
-                        <div className="dept-item" key={i}>
-                          <div className="dept-item-header">
-                            {d.name}
-                            <span>{d.patients} patients</span>
+                      {depts.length > 0 ? (
+                        depts.map((dept) => (
+                          <div className="dept-item" key={dept._id}>
+                            <div className="dept-item-header">
+                              <span>{dept._id}</span>
+
+                              <span>{dept.doctors} Doctors</span>
+                            </div>
+
+                            <div className="progress-bar">
+                              <div
+                                className="progress-fill"
+                                style={{
+                                  width: `${Math.min(dept.doctors * 20, 100)}%`,
+                                }}
+                              />
+                            </div>
                           </div>
-                          <div className="progress-bar">
-                            <div
-                              className="progress-fill"
-                              style={{ width: `${d.pct}%` }}
-                            />
-                          </div>
-                        </div>
-                      ))}
+                        ))
+                      ) : (
+                        <p>No department data found</p>
+                      )}
                     </div>
                   </div>
 
@@ -319,14 +292,18 @@ const AdminDashboard = () => {
                       <p>Latest system events</p>
                     </div>
                     <div className="activity-list">
-                      {activityIcons.map((a, i) => (
-                        <div className="activity-item" key={i}>
-                          <div className={`activity-dot ${a.color}`}>
-                            {a.icon}
+                      {activities.map((activity) => (
+                        <div className="activity-item" key={activity._id}>
+                          <div className="activity-dot blue">
+                            <FaBell />
                           </div>
+
                           <div className="activity-info">
-                            <strong>{a.title}</strong>
-                            <span>{a.time}</span>
+                            <strong>{activity.title}</strong>
+
+                            <span>
+                              {new Date(activity.createdAt).toLocaleString()}
+                            </span>
                           </div>
                         </div>
                       ))}
