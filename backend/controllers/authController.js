@@ -7,8 +7,15 @@ const Activity = require("../models/Activity");
 // POST /api/auth/register
 const register = async (req, res, next) => {
   try {
-    const { firstName, lastName, email, phone, password } = req.body;
-
+    const { firstName, lastName, email, phone, password,termsAccepted } = req.body;
+    if (!termsAccepted) {
+      return sendResponse(
+        res,
+        400,
+        false,
+        "You must accept the Terms & Conditions",
+      );  
+    }
     const existing = await User.findOne({ email });
     if (existing)
       return sendResponse(res, 409, false, "Email already registered");
