@@ -121,3 +121,33 @@
   .auth-card { padding: 1.75rem 1.25rem; }
   .name-row { grid-template-columns: 1fr; }
 }
+
+.terms-container {
+    margin: 15px 0;
+    padding: 12px;
+    border-radius: 8px;
+    background-color: #fafcfe;
+}
+
+.terms-container a {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.terms-container input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+
+.auth-logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.logo-image {
+  width: 60px;
+  height: 90px;
+  object-fit: contain;
+}

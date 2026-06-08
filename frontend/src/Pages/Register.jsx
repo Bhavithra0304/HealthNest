@@ -1,22 +1,33 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
-  FaHospital, FaUser, FaEnvelope, FaLock,
-  FaEye, FaEyeSlash, FaPhone, FaUserPlus,
+  FaUser,
+  FaEnvelope,
+  FaLock,
+  FaEye,
+  FaEyeSlash,
+  FaPhone,
+  FaUserPlus,
 } from "react-icons/fa";
 import { authAPI } from "../services/api";
 import "../Assets/css/auth.css";
+import logo from "../Assets/images/image.png"
 
 const Register = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState({
-    firstName: "", lastName: "", email: "", phone: "",
-    password: "", confirmPassword: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    password: "",
+    confirmPassword: "",
   });
   const [showPass, setShowPass] = useState(false);
   const [errors, setErrors] = useState({});
   const [apiError, setApiError] = useState("");
   const [success, setSuccess] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
   const set = (field) => (e) => setForm({ ...form, [field]: e.target.value });
 
@@ -31,7 +42,8 @@ const Register = () => {
       e.phone = "Enter a valid phone number";
     if (!form.password) e.password = "Password is required";
     else if (form.password.length < 6) e.password = "Minimum 6 characters";
-    if (!form.confirmPassword) e.confirmPassword = "Please confirm your password";
+    if (!form.confirmPassword)
+      e.confirmPassword = "Please confirm your password";
     else if (form.password !== form.confirmPassword)
       e.confirmPassword = "Passwords do not match";
     return e;
@@ -40,8 +52,17 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setApiError("");
+
+    if (!termsAccepted) {
+      setApiError("Please accept the Terms & Conditions and Privacy Policy");
+      return;
+    }
+
     const errs = validate();
-    if (Object.keys(errs).length) { setErrors(errs); return; }
+    if (Object.keys(errs).length) {
+      setErrors(errs);
+      return;
+    }
 
     try {
       await authAPI.register({
@@ -50,7 +71,9 @@ const Register = () => {
         email: form.email,
         phone: form.phone,
         password: form.password,
+        termsAccepted,
       });
+
       setSuccess(true);
       setTimeout(() => navigate("/login"), 2000);
     } catch (err) {
@@ -62,21 +85,8 @@ const Register = () => {
     <div className="auth-page">
       <div className="auth-card auth-card-wide">
         <div className="auth-logo">
-          <Link
-            to="/"
-            className="logo"
-            style={{
-              display: "flex", alignItems: "center", justifyContent: "center",
-              gap: "0.5rem", fontSize: "1.5rem", fontWeight: "800",
-              color: "var(--primary)", textDecoration: "none",
-            }}
-          >
-            <FaHospital style={{ color: "var(--secondary)" }} />
-            Health<span style={{ color: "var(--secondary)" }}>Nest</span>
-          </Link>
-          <p>Create your patient account</p>
+          <img src={logo} alt="HealthNest Logo" className="logo-image" />
         </div>
-
         <h2 className="auth-title">Create Account</h2>
         <p className="auth-subtitle">Join HealthNest for seamless healthcare</p>
 
@@ -93,17 +103,31 @@ const Register = () => {
               <label>First Name</label>
               <div className="input-icon-wrap">
                 <FaUser className="input-icon" />
-                <input type="text" placeholder="John" value={form.firstName} onChange={set("firstName")} />
+                <input
+                  type="text"
+                  placeholder="John"
+                  value={form.firstName}
+                  onChange={set("firstName")}
+                />
               </div>
-              {errors.firstName && <p className="error-msg">{errors.firstName}</p>}
+              {errors.firstName && (
+                <p className="error-msg">{errors.firstName}</p>
+              )}
             </div>
             <div className="form-group">
               <label>Last Name</label>
               <div className="input-icon-wrap">
                 <FaUser className="input-icon" />
-                <input type="text" placeholder="Doe" value={form.lastName} onChange={set("lastName")} />
+                <input
+                  type="text"
+                  placeholder="Doe"
+                  value={form.lastName}
+                  onChange={set("lastName")}
+                />
               </div>
-              {errors.lastName && <p className="error-msg">{errors.lastName}</p>}
+              {errors.lastName && (
+                <p className="error-msg">{errors.lastName}</p>
+              )}
             </div>
           </div>
 
@@ -111,7 +135,12 @@ const Register = () => {
             <label>Email Address</label>
             <div className="input-icon-wrap">
               <FaEnvelope className="input-icon" />
-              <input type="email" placeholder="you@example.com" value={form.email} onChange={set("email")} />
+              <input
+                type="email"
+                placeholder="you@example.com"
+                value={form.email}
+                onChange={set("email")}
+              />
             </div>
             {errors.email && <p className="error-msg">{errors.email}</p>}
           </div>
@@ -120,7 +149,12 @@ const Register = () => {
             <label>Phone Number</label>
             <div className="input-icon-wrap">
               <FaPhone className="input-icon" />
-              <input type="tel" placeholder="+1 234 567 8900" value={form.phone} onChange={set("phone")} />
+              <input
+                type="tel"
+                placeholder="+1 234 567 8900"
+                value={form.phone}
+                onChange={set("phone")}
+              />
             </div>
             {errors.phone && <p className="error-msg">{errors.phone}</p>}
           </div>
@@ -135,7 +169,11 @@ const Register = () => {
                 value={form.password}
                 onChange={set("password")}
               />
-              <button type="button" className="toggle-btn" onClick={() => setShowPass(!showPass)}>
+              <button
+                type="button"
+                className="toggle-btn"
+                onClick={() => setShowPass(!showPass)}
+              >
                 {showPass ? <FaEyeSlash /> : <FaEye />}
               </button>
             </div>
@@ -153,9 +191,32 @@ const Register = () => {
                 onChange={set("confirmPassword")}
               />
             </div>
-            {errors.confirmPassword && <p className="error-msg">{errors.confirmPassword}</p>}
+            {errors.confirmPassword && (
+              <p className="error-msg">{errors.confirmPassword}</p>
+            )}
           </div>
 
+          <div className="terms-container">
+            <input
+              type="checkbox"
+              id="terms"
+              name="terms"
+              checked={termsAccepted}
+              onChange={(e) => setTermsAccepted(e.target.checked)}
+              required
+            />
+
+            <label htmlFor="terms">
+              I agree to the
+              <a href="/terms" target="_blank">
+                Terms & Conditions
+              </a>{" "}
+              and{" "}
+              <a href="/privacy-policy" target="_blank">
+                Privacy Policy
+              </a>
+            </label>
+          </div>
           <button type="submit" className="btn-primary">
             <FaUserPlus /> Create Account
           </button>

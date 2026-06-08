@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import {
-  FaHospital,
   FaPhoneAlt,
   FaEnvelope,
   FaMapMarkerAlt,
@@ -13,6 +12,7 @@ import {
   FaChevronRight,
 } from "react-icons/fa";
 import "../Assets/css/footer.css";
+import logo from "../Assets/images/image.png"
 
 const Footer = () => (
   <footer className="footer">
@@ -20,10 +20,7 @@ const Footer = () => (
       {/* Brand */}
       <div className="footer-brand">
         <Link to="/" className="logo">
-          <FaHospital style={{ color: "#18a999", fontSize: "1.6rem" }} />
-          <span style={{ color: "#fff" }}>
-            Health<span style={{ color: "#18a999" }}>Nest</span>
-          </span>
+          <img src={logo} alt="HealthNest Logo" className="logo-image" />
         </Link>
         <p>
           HealthNest is committed to delivering world-class healthcare services

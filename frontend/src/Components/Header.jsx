@@ -113,13 +113,6 @@ const Header = () => {
               >
                 Login
               </Link>
-              <Link
-                to="/register"
-                className="btn-primary"
-                style={{ padding: "0.5rem 1.1rem" }}
-              >
-                Register
-              </Link>
             </>
           )}
 

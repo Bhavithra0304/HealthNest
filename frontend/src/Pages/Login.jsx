@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
-  FaHospital, FaEnvelope, FaLock, FaEye, FaEyeSlash,
+   FaEnvelope, FaLock, FaEye, FaEyeSlash,
   FaSignInAlt,
 } from "react-icons/fa";
 import { authAPI } from "../services/api";
 import "../Assets/css/auth.css";
+import logo from "../Assets/images/image.png"
 
 const Login = () => {
   const navigate = useNavigate();
@@ -59,20 +60,8 @@ const Login = () => {
     <div className="auth-page">
       <div className="auth-card">
         <div className="auth-logo">
-          <Link
-            to="/"
-            className="logo"
-            style={{
-              display: "flex", alignItems: "center", justifyContent: "center",
-              gap: "0.5rem", fontSize: "1.5rem", fontWeight: "800",
-              color: "var(--primary)", textDecoration: "none",
-            }}
-          >
-            <FaHospital style={{ color: "var(--secondary)" }} />
-            Health<span style={{ color: "var(--secondary)" }}>Nest</span>
-          </Link>
-          <p>Sign in to your account</p>
-        </div>
+                  <img src={logo} alt="HealthNest Logo" className="logo-image" />
+                </div>
 
         <h2 className="auth-title">Welcome Back</h2>
         <p className="auth-subtitle">Enter your credentials to continue</p>
