@@ -3,9 +3,13 @@ const { body } = require("express-validator");
 const validate = require("../middleware/validate");
 const { protect, adminOnly } = require("../middleware/auth");
 const {
-  bookAppointment, getAppointments, updateStatus, deleteAppointment, rescheduleAppointment,
+  bookAppointment, getAppointments, updateStatus, deleteAppointment, rescheduleAppointment,getDoctorAppointments,
+  getDoctorPatients,
 } = require("../controllers/appointmentController");
+router.get("/doctor", protect, getDoctorAppointments);
+router.get("/doctor/patients", protect, getDoctorPatients);
 
+router.get("/", protect, getAppointments);
 router.post(
   "/",
   protect,
@@ -23,8 +27,11 @@ router.post(
 );
 
 router.get("/", protect, getAppointments);
+
 router.put("/:id/status", protect, adminOnly, updateStatus);
+
 router.put("/:id/reschedule", protect, rescheduleAppointment);
+
 router.delete("/:id", protect, deleteAppointment);
 
 module.exports = router;

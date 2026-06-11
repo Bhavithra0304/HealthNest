@@ -3,18 +3,21 @@ const { generateToken } = require("../utils/jwt");
 const sendResponse = require("../utils/sendResponse");
 const crypto = require("crypto");
 const Activity = require("../models/Activity");
+const Doctor = require("../models/Doctor");
+const bcrypt = require("bcryptjs");
 
 // POST /api/auth/register
 const register = async (req, res, next) => {
   try {
-    const { firstName, lastName, email, phone, password,termsAccepted } = req.body;
+    const { firstName, lastName, email, phone, password, termsAccepted } =
+      req.body;
     if (!termsAccepted) {
       return sendResponse(
         res,
         400,
         false,
         "You must accept the Terms & Conditions",
-      );  
+      );
     }
     const existing = await User.findOne({ email });
     if (existing)
@@ -59,7 +62,7 @@ const login = async (req, res, next) => {
       password === process.env.ADMIN_PASSWORD
     ) {
       const token = generateToken(
-        { role: "admin", email },
+        { role: "Admin", email },
         rememberMe ? "30d" : process.env.JWT_EXPIRE,
       );
       return sendResponse(res, 200, true, "Admin login successful", {
@@ -68,8 +71,28 @@ const login = async (req, res, next) => {
       });
     }
 
-    const user = await User.findOne({ email });
-    if (!user || !(await user.matchPassword(password))) {
+    let user = await User.findOne({ email });
+    let role = "user";
+
+    if (!user) {
+      user = await Doctor.findOne({ email });
+      role = "doctor";
+      console.log("doctor");
+    }
+
+    if (!user) {
+      return sendResponse(res, 401, false, "Invalid email or password");
+    }
+
+    let passwordMatch = false;
+
+    if (role === "doctor") {
+      passwordMatch = await bcrypt.compare(password, user.password);
+    } else {
+      passwordMatch = await user.matchPassword(password);
+    }
+
+    if (!passwordMatch) {
       return sendResponse(res, 401, false, "Invalid email or password");
     }
     if (user.status === "inactive") {
@@ -77,8 +100,12 @@ const login = async (req, res, next) => {
     }
 
     const token = generateToken(
-      { id: user._id, role: user.role },
+      {
+        id: user._id,
+        role: role === "doctor" ? "doctor" : user.role,
+      },
       rememberMe ? "30d" : process.env.JWT_EXPIRE,
+      console.log("Doctor Login", user._id, role),
     );
 
     sendResponse(res, 200, true, "Login successful", {
@@ -87,7 +114,7 @@ const login = async (req, res, next) => {
         id: user._id,
         name: user.name,
         email: user.email,
-        role: user.role,
+        role: role === "doctor" ? "doctor" : user.role,
       },
     });
   } catch (err) {
@@ -159,7 +186,7 @@ const resetPassword = async (req, res, next) => {
 
 // GET /api/auth/me
 const getMe = async (req, res) => {
-  if (req.user.role === "admin") {
+  if (req.user.role === "Admin") {
     return sendResponse(res, 200, true, "Admin profile", req.user);
   }
   sendResponse(res, 200, true, "User profile", req.user);
