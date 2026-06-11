@@ -4,14 +4,14 @@ export const BASE_URL =
     throw new Error("REACT_APP_API_URL is not defined in environment variables");
   })();
 
-/* ─────────────────────────────
-   SAFE TOKEN PARSER
-───────────────────────────── */
-
 const getToken = () => {
   const admin =
     localStorage.getItem("hn_admin") ||
     sessionStorage.getItem("hn_admin");
+
+  const doctor =
+    localStorage.getItem("hn_doctor") ||
+    sessionStorage.getItem("hn_doctor");
 
   const user =
     localStorage.getItem("hn_user") ||
@@ -22,6 +22,8 @@ const getToken = () => {
   try {
     parsed = admin
       ? JSON.parse(admin)
+      : doctor
+      ? JSON.parse(doctor)
       : user
       ? JSON.parse(user)
       : null;
@@ -32,9 +34,6 @@ const getToken = () => {
   return parsed?.token || null;
 };
 
-/* ─────────────────────────────
-   SAFE REQUEST WRAPPER
-───────────────────────────── */
 
 const request = async (endpoint, options = {}) => {
   const token = getToken();
@@ -73,10 +72,6 @@ const request = async (endpoint, options = {}) => {
   }
 };
 
-/* ─────────────────────────────
-   APIs (UNCHANGED LOGIC)
-───────────────────────────── */
-
 export const authAPI = {
   register: (body) =>
     request("/auth/register", {
@@ -113,18 +108,26 @@ export const authAPI = {
 
 export const doctorAPI = {
   getAll: (params = "") => request(`/doctors${params}`),
+
   getById: (id) => request(`/doctors/${id}`),
+
+  dashboard: () => request("/doctors/dashboard"),
+
   create: (body) =>
     request("/doctors", {
       method: "POST",
       body: JSON.stringify(body),
     }),
+
   update: (id, body) =>
     request(`/doctors/${id}`, {
       method: "PUT",
       body: JSON.stringify(body),
     }),
-  delete: (id) => request(`/doctors/${id}`, { method: "DELETE" }),
+
+  delete: (id) => request(`/doctors/${id}`, {
+    method: "DELETE",
+  }),
 };
 
 export const appointmentAPI = {
@@ -134,7 +137,14 @@ export const appointmentAPI = {
       body: JSON.stringify(body),
     }),
 
-  getAll: (params = "") => request(`/appointments${params}`),
+  getAll: (params = "") =>
+    request(`/appointments${params}`),
+
+  getDoctorAppointments: () =>
+    request("/appointments/doctor"),
+
+  getDoctorPatients: () =>
+    request("/appointments/doctor/patients"),
 
   updateStatus: (id, status) =>
     request(`/appointments/${id}/status`, {
@@ -148,7 +158,10 @@ export const appointmentAPI = {
       body: JSON.stringify(body),
     }),
 
-  delete: (id) => request(`/appointments/${id}`, { method: "DELETE" }),
+  delete: (id) =>
+    request(`/appointments/${id}`, {
+      method: "DELETE",
+    }),
 };
 
 export const patientAPI = {
@@ -208,3 +221,8 @@ export const billAPI = {
 export const dashboardAPI = {
   get: () => request("/dashboard"),
 };
+
+export const doctorDashboardAPI = {
+  get: () => request("/doctors/dashboard"),
+};
+

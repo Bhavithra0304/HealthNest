@@ -20,9 +20,14 @@ import ManageAppointments from "../Pages/ManageAppointments";
 import NotFound from "../Pages/NotFound";
 import ProtectedRoute from "../Components/ProtectedRoute";
 import UserDashboard from "../Pages/UserDashboard";
-
+import DoctorDashboard from "../Pages/DoctorDashboard"
+import DoctorPatients from "../Pages/DoctorPatients";
+import DoctorAppointments from "../Pages/DoctorAppointments";
+import ScrollToTop from "../Components/ScrollToTop";
 const AppRoutes = () => (
+  
   <BrowserRouter>
+   <ScrollToTop/>
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/about" element={<About />} />
@@ -35,6 +40,12 @@ const AppRoutes = () => (
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/doctor" element={<DoctorDashboard />} />
+      <Route path="/doctor/patients" element={<DoctorPatients />} />
+      <Route
+        path="/doctor/appointments"
+        element={<DoctorAppointments />}
+      />
       <Route path="/appointment" element={<ProtectedRoute> <Appointment /></ProtectedRoute> }/>
       <Route path="/dashboard" element={<ProtectedRoute><UserDashboard /></ProtectedRoute>} />
       <Route path="/admin" element={<ProtectedRoute adminOnly><AdminDashboard /></ProtectedRoute> }/>

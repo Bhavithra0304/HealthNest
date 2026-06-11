@@ -8,7 +8,12 @@ export const getCurrentUser = () => {
   if (fromSession) return JSON.parse(fromSession);
   return null;
 };
-
+export const getDoctorSession = () => {
+  return (
+    JSON.parse(localStorage.getItem("hn_doctor")) ||
+    JSON.parse(sessionStorage.getItem("hn_doctor"))
+  );
+};
 export const getAdminSession = () => {
   const admin =
     localStorage.getItem("hn_admin") || sessionStorage.getItem("hn_admin");

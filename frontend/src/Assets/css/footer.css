@@ -1,3 +1,6 @@
+html {
+  scroll-behavior: smooth;
+}
 .footer {
   background: var(--primary-dark);
   color: #cfe0f0;

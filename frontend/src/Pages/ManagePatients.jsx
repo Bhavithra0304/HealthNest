@@ -18,8 +18,10 @@ const ManagePatients = () => {
 
   const filtered = patients.filter(
     (p) =>
-      `${p.firstName} ${p.lastName}`.toLowerCase().includes(search.toLowerCase()) ||
-      p.email?.toLowerCase().includes(search.toLowerCase())
+      `${p.firstName} ${p.lastName}`
+        .toLowerCase()
+        .includes(search.toLowerCase()) ||
+      p.email?.toLowerCase().includes(search.toLowerCase()),
   );
 
   const handleDelete = async (id) => {
@@ -42,7 +44,17 @@ const ManagePatients = () => {
             <p>View all registered patients in the system</p>
           </div>
           <div className="topbar-right">
-            <div style={{ background: "#f0f4f8", border: "1.5px solid #d9e7f2", borderRadius: "8px", padding: "0.45rem 1rem", fontSize: "0.85rem", fontWeight: 600, color: "#0f4c81" }}>
+            <div
+              style={{
+                background: "#f0f4f8",
+                border: "1.5px solid #d9e7f2",
+                borderRadius: "8px",
+                padding: "0.45rem 1rem",
+                fontSize: "0.85rem",
+                fontWeight: 600,
+                color: "#0f4c81",
+              }}
+            >
               Total: {patients.length} patients
             </div>
           </div>
@@ -67,27 +79,39 @@ const ManagePatients = () => {
             </div>
 
             {loading ? (
-              <p style={{ padding: "2rem", color: "#5f7285" }}>Loading patients...</p>
+              <p style={{ padding: "2rem", color: "#5f7285" }}>
+                Loading patients...
+              </p>
             ) : (
               <table className="data-table">
                 <thead>
                   <tr>
-                    <th>#</th><th>Patient</th><th>Phone</th>
-                    <th>Registered On</th><th>Status</th><th>Actions</th>
+                    <th>#</th>
+                    <th>Patient</th>
+                    <th>Phone</th>
+                    <th>Registered On</th>
+                    <th>Status</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filtered.length > 0 ? (
                     filtered.map((p, i) => (
                       <tr key={p._id}>
-                        <td style={{ color: "#5f7285", fontSize: "0.82rem" }}>{String(i + 1).padStart(2, "0")}</td>
+                        <td style={{ color: "#5f7285", fontSize: "0.82rem" }}>
+                          {String(i + 1).padStart(2, "0")}
+                        </td>
                         <td>
                           <div className="table-avatar">
                             <div className="table-avatar-circle">
-                              {`${p.firstName} ${p.lastName}`.slice(0, 2).toUpperCase()}
+                              {`${p.firstName} ${p.lastName}`
+                                .slice(0, 2)
+                                .toUpperCase()}
                             </div>
                             <div>
-                              <strong>{p.firstName} {p.lastName}</strong>
+                              <strong>
+                                {p.firstName} {p.lastName}
+                              </strong>
                               <span>{p.email}</span>
                             </div>
                           </div>
@@ -95,17 +119,30 @@ const ManagePatients = () => {
                         <td>{p.phone || "—"}</td>
                         <td>
                           {p.createdAt
-                            ? new Date(p.createdAt).toLocaleDateString("en-US", { day: "numeric", month: "short", year: "numeric" })
+                            ? new Date(p.createdAt).toLocaleDateString(
+                                "en-US",
+                                {
+                                  day: "numeric",
+                                  month: "short",
+                                  year: "numeric",
+                                },
+                              )
                             : "—"}
                         </td>
                         <td>
-                          <span className={`badge-status ${p.status === "active" ? "active" : "pending"}`}>
+                          <span
+                            className={`badge-status ${p.status === "active" ? "active" : "pending"}`}
+                          >
                             {p.status === "active" ? "Active" : "Inactive"}
                           </span>
                         </td>
                         <td>
                           <div className="action-btns">
-                            <button className="btn-icon delete" title="Remove Patient" onClick={() => handleDelete(p._id)}>
+                            <button
+                              className="btn-icon delete"
+                              title="Remove Patient"
+                              onClick={() => handleDelete(p._id)}
+                            >
                               <FaTrash />
                             </button>
                           </div>
@@ -114,9 +151,25 @@ const ManagePatients = () => {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={6} style={{ textAlign: "center", padding: "3rem", color: "#5f7285" }}>
-                        <FaUsers style={{ fontSize: "2rem", opacity: 0.3, display: "block", margin: "0 auto 0.5rem" }} />
-                        {search ? "No patients match your search." : "No patients registered yet."}
+                      <td
+                        colSpan={6}
+                        style={{
+                          textAlign: "center",
+                          padding: "3rem",
+                          color: "#5f7285",
+                        }}
+                      >
+                        <FaUsers
+                          style={{
+                            fontSize: "2rem",
+                            opacity: 0.3,
+                            display: "block",
+                            margin: "0 auto 0.5rem",
+                          }}
+                        />
+                        {search
+                          ? "No patients match your search."
+                          : "No patients registered yet."}
                       </td>
                     </tr>
                   )}

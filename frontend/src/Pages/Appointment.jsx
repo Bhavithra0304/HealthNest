@@ -26,6 +26,7 @@ const departments = [
   "Oncology",
   "Ophthalmology",
   "Pulmonology",
+  "Gynecology",
   "General Medicine",
 ];
 
@@ -86,7 +87,16 @@ const Appointment = () => {
 
     setLoading(true);
     try {
-      await appointmentAPI.book(form);
+      const selectedDoctor = doctors.find(
+        (doctor) => `${doctor.name} – ${doctor.specialization}` === form.doctor
+      );
+
+      const payload = {
+        ...form,
+        doctorId: selectedDoctor?._id || null,
+      };
+
+      await appointmentAPI.book(payload);
       setSuccess(true);
       setErrors({});
     } catch (err) {

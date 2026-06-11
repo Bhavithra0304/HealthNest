@@ -26,6 +26,7 @@ const DEPARTMENTS = [
 const emptyForm = {
   name: "",
   email: "",
+  password: "",
   phone: "",
   specialization: "",
   qualification: "",
@@ -320,6 +321,12 @@ const ManageDoctors = () => {
                   field: "email",
                   type: "email",
                   required: true,
+                },
+                {
+                  label: "Password",
+                  field: "password",
+                  type: "password",
+                  required: !editDoc,
                 },
                 { label: "Phone", field: "phone", type: "tel" },
                 {

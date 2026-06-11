@@ -1,16 +1,23 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
-   FaEnvelope, FaLock, FaEye, FaEyeSlash,
+  FaEnvelope,
+  FaLock,
+  FaEye,
+  FaEyeSlash,
   FaSignInAlt,
 } from "react-icons/fa";
 import { authAPI } from "../services/api";
 import "../Assets/css/auth.css";
-import logo from "../Assets/images/image.png"
+import logo from "../Assets/images/image.png";
 
 const Login = () => {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ email: "", password: "", rememberMe: false });
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+    rememberMe: false,
+  });
   const [showPass, setShowPass] = useState(false);
   const [errors, setErrors] = useState({});
   const [apiError, setApiError] = useState("");
@@ -28,7 +35,10 @@ const Login = () => {
     e.preventDefault();
     setApiError("");
     const errs = validate();
-    if (Object.keys(errs).length) { setErrors(errs); return; }
+    if (Object.keys(errs).length) {
+      setErrors(errs);
+      return;
+    }
 
     setLoading(true);
     try {
@@ -42,15 +52,20 @@ const Login = () => {
       const userData = { ...user, token };
       const storage = form.rememberMe ? localStorage : sessionStorage;
 
-      if (user.role === "admin") {
+      if (user.role === "Admin") {
         storage.setItem("hn_admin", JSON.stringify(userData));
         navigate("/admin");
+      } else if (user.role === "doctor") {
+        storage.setItem("hn_doctor", JSON.stringify(userData));
+        navigate("/doctor");
       } else {
         storage.setItem("hn_user", JSON.stringify(userData));
         navigate("/dashboard");
       }
     } catch (err) {
-      setApiError(err.message || "Invalid email or password. Please try again.");
+      setApiError(
+        err.message || "Invalid email or password. Please try again.",
+      );
     } finally {
       setLoading(false);
     }
@@ -60,8 +75,8 @@ const Login = () => {
     <div className="auth-page">
       <div className="auth-card">
         <div className="auth-logo">
-                  <img src={logo} alt="HealthNest Logo" className="logo-image" />
-                </div>
+          <img src={logo} alt="HealthNest Logo" className="logo-image" />
+        </div>
 
         <h2 className="auth-title">Welcome Back</h2>
         <p className="auth-subtitle">Enter your credentials to continue</p>
@@ -109,7 +124,9 @@ const Login = () => {
               <input
                 type="checkbox"
                 checked={form.rememberMe}
-                onChange={(e) => setForm({ ...form, rememberMe: e.target.checked })}
+                onChange={(e) =>
+                  setForm({ ...form, rememberMe: e.target.checked })
+                }
               />
               Remember Me
             </label>
@@ -119,14 +136,19 @@ const Login = () => {
           </div>
 
           <button type="submit" className="btn-primary" disabled={loading}>
-            {loading ? "Signing in..." : <><FaSignInAlt /> Sign In</>}
+            {loading ? (
+              "Signing in..."
+            ) : (
+              <>
+                <FaSignInAlt /> Sign In
+              </>
+            )}
           </button>
         </form>
 
         <div className="auth-footer-text">
           Don't have an account? <Link to="/register">Register here</Link>
         </div>
-
       </div>
     </div>
   );
