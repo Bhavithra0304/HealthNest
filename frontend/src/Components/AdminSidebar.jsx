@@ -1,7 +1,6 @@
 import React from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink,Link, useNavigate } from "react-router-dom";
 import {
-  FaHospital,
   FaTachometerAlt,
   FaUserMd,
   FaUsers,
@@ -11,7 +10,7 @@ import {
 } from "react-icons/fa";
 import { logout, getAdminSession } from "./ProtectedRoute";
 import "../Assets/css/admin.css";
-
+import logo from "../Assests/images/imahe.png";
 const navItems = [
   { to: "/admin", icon: <FaTachometerAlt />, label: "Dashboard", end: true },
   { to: "/admin/doctors", icon: <FaUserMd />, label: "Doctors" },
@@ -36,12 +35,10 @@ const AdminSidebar = () => {
       {/* Brand */}
       <div className="sidebar-brand">
         <div className="sidebar-logo">
-          <div className="sidebar-logo-icon">
-            <FaHospital />
-          </div>
-          <div className="sidebar-logo-text">
-            Health<span>Nest</span>
-          </div>
+          <Link to="/" className="logo">
+          <img src={logo} alt="HealthNest Logo" className="logo-image" />
+          HealthNest
+        </Link>
         </div>
         <div style={{ marginTop: "0.5rem" }}>
           <span className="sidebar-admin-badge">

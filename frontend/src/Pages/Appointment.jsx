@@ -20,13 +20,13 @@ const timeSlots = [
 const departments = [
   "Cardiology",
   "Neurology",
+  "Gynecology",
   "Orthopedics",
   "Pediatrics",
   "Dermatology",
   "Oncology",
   "Ophthalmology",
   "Pulmonology",
-  "Gynecology",
   "General Medicine",
 ];
 

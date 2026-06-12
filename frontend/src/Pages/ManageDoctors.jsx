@@ -20,6 +20,7 @@ const DEPARTMENTS = [
   "Oncology",
   "Ophthalmology",
   "Pulmonology",
+  "Gynecology",
   "General Medicine",
 ];
 

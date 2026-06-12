@@ -110,7 +110,7 @@ const ManagePatients = () => {
                             </div>
                             <div>
                               <strong>
-                                {p.firstName} {p.lastName}
+                                {p.name}
                               </strong>
                               <span>{p.email}</span>
                             </div>
