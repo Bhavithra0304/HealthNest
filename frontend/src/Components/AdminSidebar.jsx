@@ -10,7 +10,7 @@ import {
 } from "react-icons/fa";
 import { logout, getAdminSession } from "./ProtectedRoute";
 import "../Assets/css/admin.css";
-import logo from "../Assests/images/imahe.png";
+import logo from "../Assets/images/image.png";
 const navItems = [
   { to: "/admin", icon: <FaTachometerAlt />, label: "Dashboard", end: true },
   { to: "/admin/doctors", icon: <FaUserMd />, label: "Doctors" },

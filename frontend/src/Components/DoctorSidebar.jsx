@@ -1,6 +1,6 @@
 import React from "react";
 import { Link,NavLink, useNavigate } from "react-router-dom";
-import logo from "../Assests/images/image.png";
+import logo from "../Assets/images/image.png";
 import {
   FaTachometerAlt,
   FaUsers,
