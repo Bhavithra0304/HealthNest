@@ -1,7 +1,7 @@
 import React from "react";
-import { Link,NavLink, useNavigate } from "react-router-dom";
-import logo from "../Assets/images/image.png";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
+  FaHospital,
   FaTachometerAlt,
   FaUsers,
   FaCalendarCheck,
@@ -43,10 +43,13 @@ const DoctorSidebar = () => {
       {/* Brand */}
       <div className="sidebar-brand">
         <div className="sidebar-logo">
-          <Link to="/" className="logo">
-          <img src={logo} alt="HealthNest Logo" className="logo-image" />
-          HealthNest
-        </Link>
+          <div className="sidebar-logo-icon">
+            <FaHospital />
+          </div>
+
+          <div className="sidebar-logo-text">
+            Health<span>Nest</span>
+          </div>
         </div>
 
         <div style={{ marginTop: "0.5rem" }}>

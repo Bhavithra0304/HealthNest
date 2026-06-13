@@ -46,7 +46,9 @@ const Header = () => {
       <div className="header-inner">
         <Link to="/" className="logo">
           <img src={logo} alt="HealthNest Logo" className="logo-image" />
-          HealthNest
+          <div className="sidebar-logo-text">
+            Health<span>Nest</span>
+          </div>
         </Link>
         <nav className={`nav ${menuOpen ? "open" : ""}`}>
           <NavLink to="/" onClick={() => setMenuOpen(false)} end>
